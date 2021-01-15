@@ -13,6 +13,7 @@ paperconfig1 = {
     "lamb": 0.2,
     "theta": 0,
     "f_c": c/0.2,
+    "SNR": None
 }
 
 
@@ -27,9 +28,10 @@ paperconfig2 = {
     "lamb": 0.2,
     "theta": 0,
     "f_c": c/0.2,  # must be c/lamb
+    "SNR": None
 }
 
-config3= {
+config3 = {
     "R": 0,
     "V_rad": 0,
     "A_r": 1,
@@ -43,14 +45,14 @@ config3= {
     "SNR": None
 }
 
-scenario= {
+scenario = {
     "R": 0,
     "V_rad": 0,
     "A_r": 1,
     "lamb": 0.2,
     "theta": 0.1,
     "f_c": c/0.2,
-    "SNR": None
+    "SNR": 0
 }
 
 djimavicair2 = {
@@ -60,6 +62,7 @@ djimavicair2 = {
     "f_rot": 120,
 }
 
+# taken from my own drone
 djimavicmini = {
     "N": 2,  # two blades per rotor
     "L_1": 0.005,  # 5 mm

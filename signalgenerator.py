@@ -1,9 +1,6 @@
 import math
 import cmath
-from scipy import signal
 import numpy as np
-
-import matplotlib.pyplot as plt
 
 j = complex(0, 1) # sqrt negative 1
 
@@ -46,10 +43,7 @@ def generateData(psi, f_s, sample_length):
     for i in range(int(f_s*sample_length)):
         x = i/f_s
         xs.append(x)
-        ys.append(p(x).real)
+        ys.append(psi(x).real)
 
     return xs, ys
-
-
-
 
