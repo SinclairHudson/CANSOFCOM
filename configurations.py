@@ -50,16 +50,16 @@ scenario = {
     "V_rad": 0,
     "A_r": 1,
     "lamb": 0.2,
-    "theta": 0.1,
+    "theta": 0,
     "f_c": c/0.2,
-    "SNR": 0
+    "SNR": 15
 }
 
 djimavicair2 = {
     "N": 2,
-    "L_1": 0.25,
-    "L_2": 1,
-    "f_rot": 120,
+    "L_1": 0.005,
+    "L_2": 0.05,
+    "f_rot": 200,
 }
 
 # taken from my own drone
@@ -67,5 +67,5 @@ djimavicmini = {
     "N": 2,  # two blades per rotor
     "L_1": 0.005,  # 5 mm
     "L_2": 0.035,  # 3.5 cm
-    "f_rot": 120,  # a guess
+    "f_rot": 40,  # a guess
 }
