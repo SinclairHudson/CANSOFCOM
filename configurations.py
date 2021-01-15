@@ -45,21 +45,32 @@ config3 = {
     "SNR": None
 }
 
-scenario = {
+scenarioXband= {
     "R": 0,
     "V_rad": 0,
     "A_r": 1,
-    "lamb": 0.2,
+    "lamb": 0.02998,  # X band has about a 3 cm wavelength
     "theta": 0,
-    "f_c": c/0.2,
+    "f_c": c/0.02998,
     "SNR": 15
+}
+
+scenarioWband= {
+    "R": 0,
+    "V_rad": 0,
+    "A_r": 1,
+    "lamb": 0.003189,  # W band has wavelength about 3 mm
+    "theta": 0,
+    "f_c": c/0.003189,
+    "SNR": None
 }
 
 djimavicair2 = {
     "N": 2,
     "L_1": 0.005,
-    "L_2": 0.05,
-    "f_rot": 200,
+    "L_2": 0.07,
+    # https://mavicpilots.com/threads/mavic-average-rpm.4982/
+    "f_rot": 91.66,
 }
 
 # taken from my own drone
@@ -67,5 +78,31 @@ djimavicmini = {
     "N": 2,  # two blades per rotor
     "L_1": 0.005,  # 5 mm
     "L_2": 0.035,  # 3.5 cm
-    "f_rot": 40,  # a guess
+    # https://forum.dji.com/thread-214023-1-1.html
+    "f_rot": 160,  # 9600 rpm
+}
+
+djimatrice300rtk = {
+    # https://www.bhphotovideo.com/c/product/1565975-REG/dji_cp_en_00000270_01_matrice_300_series_propeller.html
+    "N": 2,  # two blades per rotor
+    "L_1": 0.05,
+    "L_2": 0.2665,
+    "f_rot": 70,  # a guess
+}
+
+parrotdisco = {
+    # https://www.amazon.com/Parrot-PF070252-Genuine-Disco-Propeller/dp/B01MSMUWW4
+    "N": 2,  # two blades per rotor
+    "L_1": 0.01,
+    "L_2": 0.104,
+    "f_rot": 40,  # a guess (lower because rotor isn't used for lift)
+}
+
+djiphantom4 = {
+    # https://store.dji.com/ca/product/phantom-4-series-low-noise-propellers
+    "N": 2,  # two blades per rotor
+    "L_1": 0.006,
+    "L_2": 0.05,
+    # https://phantompilots.com/threads/motor-rpm.16886/
+    "f_rot": 116,
 }
