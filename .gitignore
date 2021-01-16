@@ -1,1 +1,4 @@
-*/.pdf
+*.pdf
+*.jpg
+__pycache__/*
+dataset/*
