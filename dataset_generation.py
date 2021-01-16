@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 sample_length = 0.15 # in seconds
-Wf_s = 26_000  # sample frequency for W band, in hz
 Xf_s = 10_000  # sample frequency for X band, in hz
+Wf_s = 26_000  # sample frequency for W band, in hz
 
 dataset_size = 100  # per denomination
 
 # config = dict(scenarioWband, **djimatrice300rtk)
-frequencies = [Wf_s, Xf_s]
+frequencies = [Xf_s, Wf_s]
 SNRs = [10, 5, 0]
 drones = [djimavicair2, djimatrice300rtk, djimavicmini, djiphantom4, parrotdisco]
 

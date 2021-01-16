@@ -9,17 +9,25 @@ from classifier import RadarDroneClassifier
 c = {
     "epochs": 5,
     "learning_rate": 0.001,
+    "batch_size": 0.001,
 }
 
 wandb.init(project="cansofcom", config=c)
+
+# I have a GPU
+device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 def dataloader(file_extension):
     data = np.load(file_extension)
     return data
 
 Wband0SNR = ds.DatasetFolder("dataset/26000fs/0SNR")
+dataloader = torch.utils.data.DataLoader(Wband0SNR, c["batch_size"], shuffle=True)
 
-net = RadarDroneClassifier()
+Wnet = RadarDroneClassifierW()
+
+Wband0SNR = ds.DatasetFolder("testset/26000fs/0SNR")
+test = torch.utils.data.DataLoader(Wband0SNR, c["batch_size"], shuffle=True)
 
 optim = torch.optim.AdamW(net.parameters(), lr=c["learning_rate"])
 criterion = nn.CrossEntropyLoss()
@@ -31,7 +39,7 @@ for x in range(c["epochs"]):
         optim.zero_grad()
 
         start = time.time()
-        yhat = net(inputs)
+        yhat = Wnet(inputs)
         middle = time.time()
         loss = criterion(yhat, y)
         loss.backward()
