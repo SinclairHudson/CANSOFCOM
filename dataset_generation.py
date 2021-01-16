@@ -15,7 +15,7 @@ sample_length = 0.15 # in seconds
 Xf_s = 10_000  # sample frequency for X band, in hz
 Wf_s = 26_000  # sample frequency for W band, in hz
 
-dataset_size = 100  # per denomination
+dataset_size = 10_000  # per denomination
 
 # config = dict(scenarioWband, **djimatrice300rtk)
 frequencies = [Xf_s, Wf_s]
@@ -34,6 +34,7 @@ for f_s in frequencies:
             print(SNR)
             print(drone["name"])
             print(f_s)
+            scenario["SNR"] = SNR
             p = psigenerator(**dict(scenario, **drone))
             # make the directory
             os.system(f"mkdir testset/{f_s}fs/{SNR}SNR/{drone['name']} -p")

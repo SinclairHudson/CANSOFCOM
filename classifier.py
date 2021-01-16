@@ -1,24 +1,24 @@
 import torch.nn as nn
+import torch
 
 
 class RadarDroneClassifier(nn.Module):
     def __init__(self):
         super(RadarDroneClassifier, self).__init__()
         self.conv1 = nn.Conv2d(1, 5, (1, 7))  # conv1D, effectively
-        self.conv2 = nn.Conv2d(5, 10, (5, 5))
+        self.conv2 = nn.Conv2d(5, 10, (5, 5), padding=2)
         self.maxpool = nn.MaxPool2d((2, 2), stride=(2, 2))
 
-        self.conv3 = nn.Conv2d(10, 6, (3, 3))
-        self.conv4 = nn.Conv2d(10, 6, (3, 3))
+        self.conv3 = nn.Conv2d(10, 6, (3, 3), padding=1)
+        self.conv4 = nn.Conv2d(6, 6, (3, 3), padding=1)
 
-        self.conv5 = nn.Conv2d(16, 4, (3, 3))
+        self.conv5 = nn.Conv2d(16, 4, (3, 3),padding=1)
 
         # maxpool here again
 
-        self.drop = nn.Dropout2D(p=0.5)
+        self.drop = nn.Dropout2d(p=0.5)
         self.relu = nn.LeakyReLU()
 
-        self.LN = nn.LayerNorm(size[1:])
 
     def forward(self, x):
         raise NotImplementedError()
@@ -26,16 +26,16 @@ class RadarDroneClassifier(nn.Module):
 
 class RadarDroneClassifierX(RadarDroneClassifier):
     def __init__(self):
-        super(RadarDroneClassifier, self).__init__()
+        super(RadarDroneClassifierX, self).__init__()
         self.lastdim = 756
 
+        self.LN = nn.LayerNorm((10, 8, 94))
         self.linear = nn.Linear(self.lastdim, 5)
 
-        self.relu = nn.LeakyReLU()
-        self.LN = nn.LayerNorm(size[1:])
 
     def forward(self, x):
         # input shape is 16x189
+        x = x.unsqueeze(1)  # add a channel dimension
         x = self.relu(self.conv1(x))
         x = self.drop(x)
         x = self.maxpool(x)
@@ -53,16 +53,16 @@ class RadarDroneClassifierX(RadarDroneClassifier):
 
 class RadarDroneClassifierW(RadarDroneClassifier):
     def __init__(self):
-        super(RadarDroneClassifier, self).__init__()
-        self.lastdim = 1956
+        super(RadarDroneClassifierW, self).__init__()
+        self.lastdim = 1920
 
         self.linear = nn.Linear(self.lastdim, 5)
 
-        self.relu = nn.LeakyReLU()
-        self.LN = nn.LayerNorm(size[1:])
+        self.LN = nn.LayerNorm((10, 8, 241))
 
     def forward(self, x):
         # input shape is 16x189
+        x = x.unsqueeze(1)  # add a channel dimension
         x = self.relu(self.conv1(x))
         x = self.drop(x)
         x = self.maxpool(x)
