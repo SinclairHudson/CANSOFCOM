@@ -2,12 +2,14 @@ import math
 import cmath
 import numpy as np
 
-j = complex(0, 1) # sqrt negative 1
+j = complex(0, 1)  # sqrt negative 1
+
 
 def sinc(x):
     if(x == 0):
         return 1  # this makes it continuous
     return math.sin(x) / x
+
 
 def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, **kwargs):
     """
@@ -22,8 +24,10 @@ def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, 
         prefactor = 1  # as suggested in https://discord.com/channels/760673053695934495/794667756132761610/799474019308404786
         accum = complex(0, 0)
         for n in range(N):
-            exponential = cmath.exp(-j*(4*math.pi/lamb)*(((L_1 + L_2)/2)*math.cos(theta)*math.sin(2*math.pi*f_rot*t + (2*math.pi*n)/N)))
-            sincterm = sinc(((4*math.pi)/lamb)*((L_2 - L_1)/2)*math.cos(theta)*math.sin(2*math.pi*(f_rot*t+(n/N))))
+            exponential = cmath.exp(-j*(4*math.pi/lamb)*(((L_1 + L_2)/2) *
+                                                         math.cos(theta)*math.sin(2*math.pi*f_rot*t + (2*math.pi*n)/N)))
+            sincterm = sinc(((4*math.pi)/lamb)*((L_2 - L_1)/2) *
+                            math.cos(theta)*math.sin(2*math.pi*(f_rot*t+(n/N))))
             accum += exponential*sincterm
 
         return prefactor * accum
@@ -31,6 +35,7 @@ def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, 
     if not SNR is None:
         # this is a re-arrangement of dB = 10\log_{10}{A_r^2/\sigma^2}
         variance = 10**(2*math.log10(A_r) - (SNR/10))
+
         def fuzzypsi(t):
             noise = np.random.normal(0, math.sqrt(variance))
             return psi(t) + noise
@@ -41,7 +46,7 @@ def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, 
         return psi
 
 
-def generateData(psi, f_s, sample_length):
+def generateData(psi, f_s, sample_length, offset=False):
     """
     Create a discrete series of measurements for a given psi function, taking
     just the real component
@@ -53,10 +58,13 @@ def generateData(psi, f_s, sample_length):
     """
     xs = []
     ys = []
+    offset_val = 0
+    if offset:
+    # offset a sample anywhere from 0 to 1 seconds
+        offset_val = np.random.uniform(0, 1)
     for i in range(int(f_s*sample_length)):
         x = i/f_s
         xs.append(x)
-        ys.append(psi(x).real)
+        ys.append(psi(offset_val + x).real)
 
     return xs, ys
-
