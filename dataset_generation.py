@@ -35,10 +35,6 @@ for f_s in frequencies:
             p = psigenerator(**dict(scenario, **drone))
             xs, ys = generateData(p, f_s, sample_length)
             f, t, Zxx = signal.stft(ys, f_s, window='hamming', nperseg=16, noverlap=8, return_onesided=False)
-            # for x in range(dataset_size):
-
-            # def normalization(x):
-                    # np.log10
 
             otherZZ = 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0)))
             sns.histplot(otherZZ.reshape((-1,)))
