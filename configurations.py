@@ -66,6 +66,7 @@ scenarioWband= {
 }
 
 djimavicair2 = {
+    "name": "DJI Mavic Air 2",
     "N": 2,
     "L_1": 0.005,
     "L_2": 0.07,
@@ -75,6 +76,7 @@ djimavicair2 = {
 
 # taken from my own drone
 djimavicmini = {
+    "name": "DJI Mavic Mini",
     "N": 2,  # two blades per rotor
     "L_1": 0.005,  # 5 mm
     "L_2": 0.035,  # 3.5 cm
@@ -84,6 +86,7 @@ djimavicmini = {
 
 djimatrice300rtk = {
     # https://www.bhphotovideo.com/c/product/1565975-REG/dji_cp_en_00000270_01_matrice_300_series_propeller.html
+    "name": "DJI Matrice 300 RTK",
     "N": 2,  # two blades per rotor
     "L_1": 0.05,
     "L_2": 0.2665,
@@ -92,6 +95,7 @@ djimatrice300rtk = {
 
 parrotdisco = {
     # https://www.amazon.com/Parrot-PF070252-Genuine-Disco-Propeller/dp/B01MSMUWW4
+    "name": "Parrot Disco",
     "N": 2,  # two blades per rotor
     "L_1": 0.01,
     "L_2": 0.104,
@@ -100,6 +104,7 @@ parrotdisco = {
 
 djiphantom4 = {
     # https://store.dji.com/ca/product/phantom-4-series-low-noise-propellers
+    "name": "DJI Phantom 4",
     "N": 2,  # two blades per rotor
     "L_1": 0.006,
     "L_2": 0.05,

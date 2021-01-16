@@ -9,7 +9,7 @@ def sinc(x):
         return 1  # this makes it continuous
     return math.sin(x) / x
 
-def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None):
+def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, **kwargs):
     """
     This function returns a psi function, which represents the RADAR signal off
     of a drone.
