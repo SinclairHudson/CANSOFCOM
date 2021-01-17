@@ -34,7 +34,7 @@ def confuse(l, p, num_classes):
 
 wandb.init(project="cansofcom", config=c)
 
-# I have a GPU
+# I have a GPU BONUS!
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 

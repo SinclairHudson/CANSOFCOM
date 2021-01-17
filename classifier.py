@@ -5,7 +5,7 @@ import torch
 class RadarDroneClassifier(nn.Module):
     def __init__(self):
         super(RadarDroneClassifier, self).__init__()
-        self.conv1 = nn.Conv2d(1, 5, (1, 7))  # conv1D, effectively
+        self.conv1 = nn.Conv2d(1, 5, (1, 9))  # conv1D, effectively
         self.conv2 = nn.Conv2d(5, 10, (5, 5), padding=2)
         self.maxpool = nn.MaxPool2d((2, 2), stride=(2, 2))
 
@@ -27,9 +27,9 @@ class RadarDroneClassifier(nn.Module):
 class RadarDroneClassifierX(RadarDroneClassifier):
     def __init__(self):
         super(RadarDroneClassifierX, self).__init__()
-        self.lastdim = 756
+        self.lastdim = 720
 
-        self.LN = nn.LayerNorm((10, 8, 94))
+        self.LN = nn.LayerNorm((10, 8, 90))
         self.linear = nn.Linear(self.lastdim, 5)
 
 
@@ -58,7 +58,7 @@ class RadarDroneClassifierW(RadarDroneClassifier):
 
         self.linear = nn.Linear(self.lastdim, 5)
 
-        self.LN = nn.LayerNorm((10, 8, 241))
+        self.LN = nn.LayerNorm((10, 8, 240))
 
     def forward(self, x):
         # input shape is 16x189
