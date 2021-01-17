@@ -19,9 +19,8 @@ def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, 
     """
 
     def psi(t):
-        # data will be more realistic if this prefactor is used, instead of 1
-        # prefactor = A_r * cmath.exp(j*(2*math.pi*f_c*t - (4*math.pi/lamb)*(R+V_rad*t)))
-        prefactor = 1  # as suggested in https://discord.com/channels/760673053695934495/794667756132761610/799474019308404786
+        prefactor = A_r * cmath.exp(j*(2*math.pi*f_c*t - (4*math.pi/lamb)*(R+V_rad*t)))
+        # prefactor = 1  # as suggested in https://discord.com/channels/760673053695934495/794667756132761610/799474019308404786
         accum = complex(0, 0)
         for n in range(N):
             exponential = cmath.exp(-j*(4*math.pi/lamb)*(((L_1 + L_2)/2) *
