@@ -8,7 +8,7 @@ Each drone has a unique return signal pattern, determined by its dimensions, num
 ## Parameters
 ### Drone parameters
 $N$: The number of blades in a single rotor.
-$f_{rot}$: (1/s) the frequency of rotation of the rotor. This is drone-dependent, but could be \[50, 18\]
+$f_{rot}$: (1/s) the frequency of rotation of the rotor. This is drone-dependent, but could be \[50, 18\].
 $L_1$: (meters) The distance of the blade roots from the center of rotation of the rotor. For now, assumed to be 0.
 $L_2$: (meters) The distance of the blade tips from the center of rotation of the rotor. Differs depending on drone, generally 0.05 to 0.25.
 
@@ -41,6 +41,12 @@ $f_s$: (1/s) the sampling frequency (how often we sample our RADAR return signal
 * `test.py` - big function for testing specific neural networks (TODO: make more general)
 * `visualize.py` - example for plotting a fourier transform, time-domain signals, etc.
 * `fourier.py` - provides a function to generate short and long-window STFTs.
+
+
+## Dependencies
+
+- `numpy`
+
 
 ## History
 This repository was built for the CANSOFCOM Drone Classification Machine Learning challenge of Hack The North 2020++.
