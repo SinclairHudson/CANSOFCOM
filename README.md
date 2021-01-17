@@ -45,10 +45,20 @@ Each drone has a unique return signal pattern, determined by its dimensions, num
 
 ## Dependencies
 
+- scipy
+- numpy
+- pytorch
+- matplotlib
+- scikit-learn
+- mlxtend
 
+If you're using conda, just run this and it will install everything:
+```bash
+conda env create -f environment.yml
+```
 
 ## History
-This repository was built for the CANSOFCOM Drone Classification Machine Learning challenge of Hack The North 2020++.
-You can see the original challenge in CANSOFCOM_Challenge.pdf.
+This repository was built for the CANSOFCOM Drone Classification Machine Learning challenge of Hack The North 2020++.  
+You can see the original challenge in CANSOFCOM_Challenge.pdf.  
 
 
