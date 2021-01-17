@@ -3,4 +3,5 @@
 __pycache__/*
 dataset/*
 testset/*
+trainset/*
 wandb/*
