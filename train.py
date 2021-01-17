@@ -11,11 +11,15 @@ from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
 
 
+class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
+             "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
 c = {
-    "epochs": 5,
+    "epochs": 20,
     "learning_rate": 0.001,
     "batch_size": 64,
+    "SNR": 0,
+    "f_s": 26000,
 }
 
 def confuse(l, p, num_classes):
@@ -39,25 +43,29 @@ def dataloader(file_extension):
     return data
 
 
-Wnet = RadarDroneClassifierW().to(device)
+if c["f_s"] == 26_000:
+    net = RadarDroneClassifierW().to(device)
+else:
+    net = RadarDroneClassifierX().to(device)
 
-Wband0SNR = ds.DatasetFolder(
-    "dataset/26000fs/0SNR", dataloader, extensions=("npy",))
+
+trainds = ds.DatasetFolder(
+    f"trainset/{c['f_s']}fs/{c['SNR']}SNR", dataloader, extensions=("npy",))
 
 trainLoader = torch.utils.data.DataLoader(
-    Wband0SNR, c["batch_size"], shuffle=True)
+    trainds, c["batch_size"], shuffle=True)
 
-testWband0SNR = ds.DatasetFolder(
-    "testset/26000fs/0SNR", dataloader, extensions=("npy",))
+testds = ds.DatasetFolder(
+    f"testset/{c['f_s']}fs/{c['SNR']}SNR", dataloader, extensions=("npy",))
 testLoader = torch.utils.data.DataLoader(
-    testWband0SNR, c["batch_size"], shuffle=True)
+    testds, c["batch_size"], shuffle=True)
 
-optim = torch.optim.AdamW(Wnet.parameters(), lr=c["learning_rate"])
+optim = torch.optim.AdamW(net.parameters(), lr=c["learning_rate"])
 criterion = nn.CrossEntropyLoss().to(device)
 
 for x in range(c["epochs"]):
 
-    Wnet.eval()
+    net.eval()
 
     confm = np.zeros((5, 5), dtype=int)
     correct = 0
@@ -68,7 +76,7 @@ for x in range(c["epochs"]):
         inputs = inputs.to(device)
         y = y.to(device)
 
-        yhat = Wnet(inputs.float())
+        yhat = net(inputs.float())
         loss = criterion(yhat, y)
         testloss += loss.item()
 
@@ -93,7 +101,7 @@ for x in range(c["epochs"]):
 
     })
 
-    Wnet.train()
+    net.train()
 
     for i, data in enumerate(trainLoader):
 
@@ -103,7 +111,7 @@ for x in range(c["epochs"]):
         optim.zero_grad()
 
         start = time.time()
-        yhat = Wnet(inputs.float())
+        yhat = net(inputs.float())
         middle = time.time()
         loss = criterion(yhat, y)
         loss.backward()
@@ -116,4 +124,4 @@ for x in range(c["epochs"]):
             "backward_time": end - middle,
         })
         print(
-            f"loss: {loss.item():06}, forward_time: {(middle - start):06}, backward_time: {(end - middle):06}")
+            f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):06}, backward_time: {(end - middle):06}")
