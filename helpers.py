@@ -10,3 +10,9 @@ def confuse(l, p, num_classes):
 
     assert cm.shape == (num_classes, num_classes)
     return cm
+
+def to_one_hot_vector(num_class, label):
+    b = np.zeros((label.shape[0], num_class))
+    b[np.arange(label.shape[0]), label] = 1
+
+    return b
