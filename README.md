@@ -7,26 +7,26 @@ Each drone has a unique return signal pattern, determined by its dimensions, num
 
 ## Parameters
 ### Drone parameters
-$N$: The number of blades in a single rotor.
-$f_{rot}$: (1/s) the frequency of rotation of the rotor. This is drone-dependent, but could be \[50, 18\].
-$L_1$: (meters) The distance of the blade roots from the center of rotation of the rotor. For now, assumed to be 0.
-$L_2$: (meters) The distance of the blade tips from the center of rotation of the rotor. Differs depending on drone, generally 0.05 to 0.25.
+- $N$: The number of blades in a single rotor.
+- $f_{rot}$: (1/s) the frequency of rotation of the rotor. This is drone-dependent, but could be \[50, 18\].
+- $L_1$: (meters) The distance of the blade roots from the center of rotation of the rotor. For now, assumed to be 0.
+- $L_2$: (meters) The distance of the blade tips from the center of rotation of the rotor. Differs depending on drone, generally 0.05 to 0.25.
 
 ### Scenario parameters:
-$A_r$: a scale factor, arbitrary constant. Set to 1 for now.
-$R$: (meters) The distance from the radar to the center of rotation (the rotor). Could be in the 1000 to 5000 range (a few kilometers). Assumed to be 0 for this hackathon.
-$\theta$: (radians) the positive angle between the plane of rotation of the rotor and the line of sight from the radar to the center of rotation (of the rotor). In the range \[0, $pi/2$\].
+- $A_r$: a scale factor, arbitrary constant. Set to 1 for now.
+- $R$: (meters) The distance from the radar to the center of rotation (the rotor). Could be in the 1000 to 5000 range (a few kilometers). Assumed to be 0 for this hackathon.
+- $\theta$: (radians) the positive angle between the plane of rotation of the rotor and the line of sight from the radar to the center of rotation (of the rotor). In the range \[0, $pi/2$\].
 
-$V_{rad}$: (rad/s) the radial velocity of the center of rotation (of the rotor) with respect to the RADAR. Assumed to be 0 for this hackathon, but this would affect doppler considerations.
+- $V_{rad}$: (rad/s) the radial velocity of the center of rotation (of the rotor) with respect to the RADAR. Assumed to be 0 for this hackathon, but this would affect doppler considerations.
 
 
 ### RADAR parameters:
-$f_c$: (1/s) the transmitted RADAR frequency. In the range \[10GHz, 94 GHz\].
-$\lambda$: (meters) the wavelength of the transmitted signal. lambda = c/f_c, where c is the speed of light in m/s.
+- $f_c$: (1/s) the transmitted RADAR frequency. In the range \[10GHz, 94 GHz\].
+- $\lambda$: (meters) the wavelength of the transmitted signal. lambda = c/f_c, where c is the speed of light in m/s.
 
 
-$t$: (s) the time, our real-valued continuous input.
-$f_s$: (1/s) the sampling frequency (how often we sample our RADAR return signal). 10 KHz for X-Band RADAR, 26KHz for W-Band RADAR.
+- $t$: (s) the time, our real-valued continuous input.
+- $f_s$: (1/s) the sampling frequency (how often we sample our RADAR return signal). 10 KHz for X-Band RADAR, 26KHz for W-Band RADAR.
 
 ---
 
@@ -45,7 +45,6 @@ $f_s$: (1/s) the sampling frequency (how often we sample our RADAR return signal
 
 ## Dependencies
 
-- `numpy`
 
 
 ## History
