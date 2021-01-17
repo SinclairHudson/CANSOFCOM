@@ -9,6 +9,7 @@ from classifier import RadarDroneClassifierW, RadarDroneClassifierX
 from sklearn.metrics import confusion_matrix
 from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
+from helpers import confuse
 
 
 class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
@@ -18,19 +19,10 @@ c = {
     "epochs": 20,
     "learning_rate": 0.001,
     "batch_size": 64,
-    "SNR": 0,
+    "SNR": 5,
     "f_s": 26000,
 }
 
-def confuse(l, p, num_classes):
-    cm = confusion_matrix(l, p)
-    classesrep = cm.shape[0]
-    if classesrep < num_classes:
-        pad = num_classes - classesrep
-        cm = np.pad(cm, ((0, pad), (0, pad)), mode='constant', constant_values=(0,0))  # zero pad
-
-    assert cm.shape == (num_classes, num_classes)
-    return cm
 
 wandb.init(project="cansofcom", config=c)
 
@@ -125,3 +117,5 @@ for x in range(c["epochs"]):
         })
         print(
             f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):06}, backward_time: {(end - middle):06}")
+
+torch.save(net.state_dict(), f"e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt")
