@@ -19,8 +19,8 @@ c = {
     "epochs": 20,
     "learning_rate": 0.001,
     "batch_size": 64,
-    "SNR": 5,
-    "f_s": 26000,
+    "SNR": 0,
+    "f_s": 10000,
 }
 
 
@@ -118,4 +118,5 @@ for x in range(c["epochs"]):
         print(
             f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):06}, backward_time: {(end - middle):06}")
 
+net.eval()
 torch.save(net.state_dict(), f"e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt")

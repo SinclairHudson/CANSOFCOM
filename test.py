@@ -23,7 +23,14 @@ def dataloader(file_extension):
     data = np.load(file_extension)
     return data
 
-def TestClassifier(c):
+def TestClassifier(f_s, SNR):
+    c = {
+        "epochs": 20,
+        "learning_rate": 0.001,
+        "batch_size": 64,
+        "SNR": SNR,
+        "f_s": f_s,
+    }
 
     softmax = nn.Softmax(dim=1)  # class dimension, not batch
     testds = ds.DatasetFolder(

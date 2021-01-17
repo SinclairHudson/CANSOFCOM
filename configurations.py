@@ -13,7 +13,7 @@ paperconfig1 = {
     "lamb": 0.2,
     "theta": 0,
     "f_c": c/0.2,
-    "SNR": 0
+    "SNR": None
 }
 
 
@@ -52,7 +52,7 @@ scenarioXband= {
     "lamb": 0.02998,  # X band has about a 3 cm wavelength
     "theta": 0,
     "f_c": c/0.02998,
-    "SNR": 0
+    "SNR": None
 }
 
 scenarioWband= {
@@ -62,7 +62,7 @@ scenarioWband= {
     "lamb": 0.003189,  # W band has wavelength about 3 mm
     "theta": 0,
     "f_c": c/0.003189,
-    "SNR": 0
+    "SNR": None
 }
 
 djimavicair2 = {
