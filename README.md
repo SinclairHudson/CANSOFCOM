@@ -1,5 +1,6 @@
 # CANSOFCOM
 
+![short window fourier transform](img/swstft.png)
 ## Problem
 The Canadian Special Operations Forces Command wants to classify drones based on the RADAR signals that bounce off of them.
 The drone actually distorts the returned frequency: the blades are moving fast, so some micro-doppler frequencies are returned.
