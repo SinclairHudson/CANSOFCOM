@@ -55,7 +55,7 @@ def testclassifier(f_s, SNR):
             net = RadarDroneClassifierX().to(device)
 
         net.load_state_dict(torch.load(
-            f"e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt"))
+            f"models/e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt"))
         net.eval()
 
         confm = np.zeros((5, 5), dtype=int)
