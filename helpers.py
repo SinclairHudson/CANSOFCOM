@@ -8,7 +8,7 @@ def confuse(l, p, num_classes):
         pad = num_classes - classesrep
         cm = np.pad(cm, ((0, pad), (0, pad)), mode='constant', constant_values=(0,0))  # zero pad
 
-    assert cm.shape == (num_classes, num_classes)
+    assert cm.shape == (num_classes, num_classes)  # TODO why sometimes fails
     return cm
 
 def to_one_hot_vector(num_class, label):
