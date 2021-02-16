@@ -1,6 +1,8 @@
 *.pdf
 *.jpg
+*.pt
 __pycache__/*
+.ipynb_checkpoints/*
 dataset/*
 testset/*
 trainset/*
