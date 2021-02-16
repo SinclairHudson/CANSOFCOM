@@ -46,7 +46,7 @@ for f_s in frequencies:
                 np.save(f"testset/{f_s}fs/{SNR}SNR/{drone['name']}/{x:06}.npy", Z)
 
             os.system(f"mkdir trainset/{f_s}fs/{SNR}SNR/{drone['name']} -p")
-            for x in range(testset_size):
+            for x in range(trainset_size):
                 xs, ys = generateData(p, f_s, sample_length, offset=True)
                 f, t, Zxx = signal.stft(ys, f_s, window='hamming', nperseg=16, noverlap=8, return_onesided=False)
                 Z = 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0)))

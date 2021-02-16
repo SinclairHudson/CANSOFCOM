@@ -11,12 +11,17 @@ def sinc(x):
     return math.sin(x) / x
 
 
-def psigenerator(A_r, f_c, lamb, R, V_rad, N, L_1, L_2, f_rot, theta, SNR=None, **kwargs):
+def psigenerator(f_c, lamb, N, L_1, L_2, f_rot, SNR=None, **kwargs):
     """
     This function returns a psi function, which represents the RADAR signal off
     of a drone.
     :param SNR: Signal-to-noise ratio, given in dB. If None, don't add noise
     """
+
+    A_r = np.random.chisquare(4)  # A_r is a random value from X^2 with 4 dof
+    R = np.random.uniform(low=1000, high=5000)
+    theta = np.random.uniform(low=0, high=np.pi/2)
+    V_rad = 0
 
     def psi(t):
         prefactor = A_r * cmath.exp(j*(2*math.pi*f_c*t - (4*math.pi/lamb)*(R+V_rad*t)))

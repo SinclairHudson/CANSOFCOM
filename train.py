@@ -16,7 +16,7 @@ class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
              "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
 c = {
-    "epochs": 160,
+    "epochs": 300,
     "learning_rate": 0.001,
     "batch_size": 64,
     "SNR": 0,

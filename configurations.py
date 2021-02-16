@@ -46,21 +46,13 @@ config3 = {
 }
 
 scenarioXband= {
-    "R": 0,
-    "V_rad": 0,
-    "A_r": 1,
     "lamb": 0.02998,  # X band has about a 3 cm wavelength
-    "theta": 0,
     "f_c": c/0.02998,
     "SNR": None
 }
 
 scenarioWband= {
-    "R": 0,
-    "V_rad": 0,
-    "A_r": 1,
     "lamb": 0.003189,  # W band has wavelength about 3 mm
-    "theta": 0,
     "f_c": c/0.003189,
     "SNR": None
 }
