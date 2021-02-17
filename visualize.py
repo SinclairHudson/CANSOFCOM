@@ -9,10 +9,7 @@ psi = psigenerator(**config)
 
 f_s = 10_000
 sample_length = 0.15
-xs, ys = generateData(psi, f_s, sample_length)
+xs, r_ys, i_ys = generateData(psi, f_s, sample_length)
 
-plotSTFT(xs, ys, f_s, config)
-
-
-
-
+plotSTFT(xs, r_ys, f_s, config)
+plotSTFT(xs, i_ys, f_s, config)

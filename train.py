@@ -5,7 +5,7 @@ import torch
 import torchvision
 import torchvision.datasets as ds
 import numpy as np
-from classifier import RadarDroneClassifier
+from classifier import RadarDroneClassifier, SanityNet
 from sklearn.metrics import confusion_matrix
 from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
@@ -19,8 +19,8 @@ c = {
     "epochs": 300,
     "learning_rate": 0.001,
     "batch_size": 64,
-    "SNR": 0,
-    "f_s": 10000,
+    "SNR": -5,
+    "f_s": 26000,
 }
 
 
@@ -35,7 +35,8 @@ def dataloader(file_extension):
     return data
 
 
-net = RadarDroneClassifier().to(device)
+# net = RadarDroneClassifier().to(device)
+net = SanityNet().to(device)
 
 
 trainds = ds.DatasetFolder(
@@ -113,7 +114,7 @@ for x in range(c["epochs"]):
             "backward_time": end - middle,
         })
         print(
-            f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):06}, backward_time: {(end - middle):06}")
+            f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):.6f}, backward_time: {(end - middle):.6f}")
 
 net.eval()
 torch.save(net.state_dict(), f"e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt")
