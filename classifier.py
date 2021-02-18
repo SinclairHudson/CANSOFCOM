@@ -26,7 +26,6 @@ class RadarDroneClassifier(nn.Module):
 
         self.drop = nn.Dropout2d(p=0.5)
         self.relu = nn.LeakyReLU()
-        self.sm = nn.Softmax(dim=0)
 
     def forward(self, x):
         # input shape is Bx2x?x?
@@ -42,7 +41,6 @@ class RadarDroneClassifier(nn.Module):
         x = self.drop(self.maxpool(x))
         x = self.conv6(x)
         x = torch.mean(x, dim=(2,3))  # reduce over the spatial dimensions
-        x = self.sm(x)
         # output shape is Bx5
         return x
 
@@ -60,13 +58,11 @@ class SanityNet(nn.Module):
         self.maxpool = nn.MaxPool2d((2, 2), stride=(2, 2))
 
         self.relu = nn.LeakyReLU()
-        self.sm = nn.Softmax(dim=0)
 
     def forward(self, x):
         # input shape is Bx2x?x?
         x = self.relu(self.IN1(self.conv1(x)))
         x = torch.mean(x, dim=(2,3))  # reduce over the spatial dimensions
-        x = self.sm(x)
 
         # output shape is Bx5
         return x

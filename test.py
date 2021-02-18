@@ -5,19 +5,18 @@ import torch
 import torchvision
 import torchvision.datasets as ds
 import numpy as np
-from classifier import RadarDroneClassifierW, RadarDroneClassifierX
+from classifier import RadarDroneClassifier
 from sklearn.metrics import confusion_matrix, precision_recall_curve, average_precision_score, roc_curve, auc, roc_auc_score
 from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
 import torch.nn as nn
 from helpers import confuse, to_one_hot_vector
+from OTFDataset import OTFDataset
+
+softmax = nn.Softmax(dim=0)
 
 c = {
-    "epochs": 20,
-    "learning_rate": 0.001,
     "batch_size": 64,
-    "SNR": 5,
-    "f_s": 26000,
 }
 
 
@@ -26,36 +25,23 @@ def dataloader(file_extension):
     return data
 
 
-def testclassifier(f_s, SNR):
+def testclassifier():
 
     with torch.no_grad():
         num_classes = 5
-        c = {
-            "epochs": 20,
-            "learning_rate": 0.001,
-            "batch_size": 64,
-            "SNR": SNR,
-            "f_s": f_s,
-        }
-
-        softmax = nn.Softmax(dim=1)  # class dimension, not batch
-        testds = ds.DatasetFolder(
-            f"testset/{c['f_s']}fs/{c['SNR']}SNR", dataloader, extensions=("npy",))
+        testds = OTFDataset(lamb=0.02998, length=10_000, SNR=10, f_s=26_000, sample_length=0.15)
         testLoader = torch.utils.data.DataLoader(
-            testds, c["batch_size"], shuffle=True)
+            testds, 64, shuffle=True, num_workers=4)
 
         class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
                      "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
-        if c["f_s"] == 26_000:
-            net = RadarDroneClassifierW().to(device)
-        else:
-            net = RadarDroneClassifierX().to(device)
+        net = RadarDroneClassifier().to(device)
 
         net.load_state_dict(torch.load(
-            f"models/e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt"))
+            f"e50SNR5f_s26000.pt"))
         net.eval()
 
         confm = np.zeros((5, 5), dtype=int)
@@ -65,6 +51,7 @@ def testclassifier(f_s, SNR):
         predicted_big = np.zeros((0, 5))
         true_labels = np.zeros((0, 5))
         for i, data in enumerate(testLoader):
+            print(f"{i}/{10_000/64}")
             inputs, y = data
             inputs = inputs.to(device)
             y = y.to(device)
@@ -151,3 +138,5 @@ def testclassifier(f_s, SNR):
             .format(average_precision["micro"]))
 
         plt.show()
+
+testclassifier()

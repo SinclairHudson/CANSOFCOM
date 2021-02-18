@@ -10,16 +10,17 @@ from sklearn.metrics import confusion_matrix
 from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
 from helpers import confuse
+from OTFDataset import OTFDataset
 
 
 class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
              "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
 c = {
-    "epochs": 300,
+    "epochs": 75,
     "learning_rate": 0.001,
-    "batch_size": 64,
-    "SNR": -5,
+    "batch_size": 128,
+    "SNR": 10,
     "f_s": 26000,
 }
 
@@ -35,20 +36,21 @@ def dataloader(file_extension):
     return data
 
 
-# net = RadarDroneClassifier().to(device)
-net = SanityNet().to(device)
+net = RadarDroneClassifier().to(device)
+# net = SanityNet().to(device)
 
 
 trainds = ds.DatasetFolder(
     f"trainset/{c['f_s']}fs/{c['SNR']}SNR", dataloader, extensions=("npy",))
 
+
 trainLoader = torch.utils.data.DataLoader(
-    trainds, c["batch_size"], shuffle=True)
+    trainds, c["batch_size"], shuffle=True, num_workers=2)
 
 testds = ds.DatasetFolder(
     f"testset/{c['f_s']}fs/{c['SNR']}SNR", dataloader, extensions=("npy",))
 testLoader = torch.utils.data.DataLoader(
-    testds, c["batch_size"], shuffle=True)
+    testds, c["batch_size"], shuffle=True, num_workers=2)
 
 optim = torch.optim.AdamW(net.parameters(), lr=c["learning_rate"])
 criterion = nn.CrossEntropyLoss().to(device)
@@ -108,13 +110,14 @@ for x in range(c["epochs"]):
         end = time.time()
         optim.step()
 
-        wandb.log({
-            "train_loss": loss.item(),
-            "forward_time": middle - start,
-            "backward_time": end - middle,
-        })
-        print(
-            f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):.6f}, backward_time: {(end - middle):.6f}")
+        if i % 500 == 0:
+            wandb.log({
+                "train_loss": loss.item(),
+                "forward_time": middle - start,
+                "backward_time": end - middle,
+            })
+            print(
+                f"epoch: {x}, loss: {loss.item():06}, forward_time: {(middle - start):.6f}, backward_time: {(end - middle):.6f}")
 
 net.eval()
-torch.save(net.state_dict(), f"e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt")
+torch.save(net.state_dict(), f"models/e{c['epochs']}SNR{c['SNR']}f_s{c['f_s']}.pt")

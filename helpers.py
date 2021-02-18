@@ -6,7 +6,6 @@ def confuse(l, p, num_classes):
     classesrep = cm.shape[0]
     if classesrep < num_classes:
         pad = num_classes - classesrep
-        print(pad)
         cm = np.pad(cm, ((0, pad), (0, pad)), mode='constant', constant_values=(0,0))  # zero pad
 
     assert cm.shape == (num_classes, num_classes)  # TODO why sometimes fails
