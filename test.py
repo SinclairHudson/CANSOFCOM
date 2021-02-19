@@ -25,11 +25,13 @@ def dataloader(file_extension):
     return data
 
 
-def testclassifier():
+def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_000, SNR=10, vis=False):
 
     with torch.no_grad():
         num_classes = 5
-        testds = OTFDataset(lamb=0.02998, length=10_000, SNR=10, f_s=26_000, sample_length=0.15)
+        testds = OTFDataset(lamb=0.02998, length=dataset_size, 
+                            SNR=SNR, f_s=f_s, 
+                            sample_length=sample_length)
         testLoader = torch.utils.data.DataLoader(
             testds, 64, shuffle=True, num_workers=4)
 
@@ -40,8 +42,7 @@ def testclassifier():
 
         net = RadarDroneClassifier().to(device)
 
-        net.load_state_dict(torch.load(
-            f"e50SNR5f_s26000.pt"))
+        net.load_state_dict(torch.load(model_path))
         net.eval()
 
         confm = np.zeros((5, 5), dtype=int)
@@ -51,7 +52,7 @@ def testclassifier():
         predicted_big = np.zeros((0, 5))
         true_labels = np.zeros((0, 5))
         for i, data in enumerate(testLoader):
-            print(f"{i}/{10_000/64}")
+            # print(f"{i}/{dataset_size/64}")
             inputs, y = data
             inputs = inputs.to(device)
             y = y.to(device)
@@ -78,10 +79,6 @@ def testclassifier():
             correct += (predicted == y.cpu()).sum().item()
             total += c["batch_size"]
 
-        fig, ax = plot_confusion_matrix(conf_mat=confm,
-                                        show_normed=True,
-                                        colorbar=True,
-                                        class_names=class_map)
 
         precision = dict()
         recall = dict()
@@ -115,28 +112,49 @@ def testclassifier():
         fpr["micro"], tpr["micro"], _ = roc_curve(true_labels.ravel(), predicted_big.ravel())
         roc_auc["micro"] = auc(fpr["micro"], tpr["micro"])
 
-        plt.figure()
-        for i in range(num_classes):
-            plt.plot(fpr[i], tpr[i],
-                     lw=2, label=f"{class_map[i]} ROC curve (area = {roc_auc[i]:02f})")
-        plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
-        plt.xlim([0.0, 1.0])
-        plt.ylim([0.0, 1.05])
-        plt.xlabel('False Positive Rate')
-        plt.ylabel('True Positive Rate')
-        plt.title('Receiver operating characteristic curves')
-        plt.legend(loc="lower right")
 
-        plt.figure()
-        plt.step(recall['micro'], precision['micro'], where='post')
-        plt.xlabel('Recall')
-        plt.ylabel('Precision')
-        plt.ylim([0.0, 1.05])
-        plt.xlim([0.0, 1.0])
-        plt.title(
-            'Average precision score, micro-averaged over all classes: AP={0:0.2f}'
-            .format(average_precision["micro"]))
+        if vis:
+            fig, ax = plot_confusion_matrix(conf_mat=confm,
+                                            show_normed=True,
+                                            colorbar=True,
+                                            class_names=class_map)
+            plt.figure()
+            for i in range(num_classes):
+                plt.plot(fpr[i], tpr[i],
+                         lw=2, label=f"{class_map[i]} ROC curve (area = {roc_auc[i]:02f})")
 
-        plt.show()
+            plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+            plt.xlim([0.0, 1.0])
+            plt.ylim([0.0, 1.05])
+            plt.xlabel('False Positive Rate')
+            plt.ylabel('True Positive Rate')
+            plt.title('Receiver operating characteristic curves')
+            plt.legend(loc="lower right")
 
-testclassifier()
+            plt.figure()
+            plt.step(recall['micro'], precision['micro'], where='post')
+            plt.xlabel('Recall')
+            plt.ylabel('Precision')
+            plt.ylim([0.0, 1.05])
+            plt.xlim([0.0, 1.0])
+            plt.title(
+                'Average precision score, micro-averaged over all classes: AP={0:0.2f}'
+                .format(average_precision["micro"]))
+            plt.show()
+        results = {
+            "accuracy": correct/total,
+            "AP score": average_precision["micro"],
+        }
+        return results
+
+times = [(x)*0.001 for x in range(10, 100)]
+accuracies = []
+for d in times:
+    results = testclassifier(f"models/e75SNR10f_s26000.pt", 10_000, sample_length=d, f_s=26_000, SNR=10)
+    print(results["accuracy"])
+    accuracies.append(results["accuracy"])
+
+plt.plot(times, accuracies)
+plt.xlabel('duration of signal (s)')
+plt.ylabel('accuracy (%)')
+plt.show()

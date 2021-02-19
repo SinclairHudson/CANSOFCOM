@@ -4,7 +4,7 @@ from configurations import djimavicair2, djimatrice300rtk, djimavicmini, djiphan
 import random
 import numpy as np
 
-drones = [djimavicair2, djimatrice300rtk,
+drones = [djimatrice300rtk, djimavicair2,
           djimavicmini, djiphantom4, parrotdisco]
 c = 2.998e8  # speed of light in m/s
 

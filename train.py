@@ -20,7 +20,7 @@ c = {
     "epochs": 75,
     "learning_rate": 0.001,
     "batch_size": 128,
-    "SNR": 10,
+    "SNR": 0,
     "f_s": 26000,
 }
 
