@@ -21,7 +21,9 @@ trainset_size = 10_000  # per denomination
 # config = dict(scenarioWband, **djimatrice300rtk)
 frequencies = [Wf_s, Xf_s]
 SNRs = [10, 5, 0, -5]
-drones = [djimavicair2, djimatrice300rtk, djimavicmini, djiphantom4, parrotdisco]
+
+# here's the order of drones. Don't change the order.
+drones = [djimatrice300rtk, djimavicair2, djimavicmini, djiphantom4, parrotdisco]
 
 for f_s in frequencies:
     for SNR in SNRs:

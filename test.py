@@ -12,13 +12,13 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 from helpers import confuse, to_one_hot_vector
 from OTFDataset import OTFDataset
+from drone_constants import drones, class_map
 
 softmax = nn.Softmax(dim=0)
 
 c = {
     "batch_size": 64,
 }
-
 
 def dataloader(file_extension):
     data = np.load(file_extension)
@@ -35,8 +35,6 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
         testLoader = torch.utils.data.DataLoader(
             testds, 64, shuffle=True, num_workers=4)
 
-        class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
-                     "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
@@ -143,18 +141,30 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
             plt.show()
         results = {
             "accuracy": correct/total,
-            "AP score": average_precision["micro"],
+            "AP score": average_precision,
         }
         return results
 
 times = [(x)*0.001 for x in range(10, 100)]
 accuracies = []
+micro_averages = []
+APs = [[] for x in range(len(class_map))]
 for d in times:
-    results = testclassifier(f"models/e75SNR10f_s26000.pt", 10_000, sample_length=d, f_s=26_000, SNR=10)
-    print(results["accuracy"])
+    print(d)
+    results = testclassifier(f"models/e75SNR10f_s26000.pt", dataset_size=10_000, sample_length=d, f_s=26_000, SNR=10)
     accuracies.append(results["accuracy"])
+    micro_averages.append(results["AP score"]['micro'])
+    for x in range(len(class_map)):
+        APs[x].append(results["AP score"][x])
 
-plt.plot(times, accuracies)
+# plt.plot(times, accuracies, label="accuracy")
+for x in range(len(class_map)):
+    plt.plot(times, APs[x], label=class_map[x])
+
+plt.plot(times, micro_averages, label="average")
+
 plt.xlabel('duration of signal (s)')
-plt.ylabel('accuracy (%)')
+plt.ylabel('Average Precision')
+plt.ylim([0.0, 1.05])
+plt.legend()
 plt.show()

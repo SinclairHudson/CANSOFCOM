@@ -11,16 +11,14 @@ from mlxtend.plotting import plot_confusion_matrix
 import matplotlib.pyplot as plt
 from helpers import confuse
 from OTFDataset import OTFDataset
+from drone_constants import class_map
 
-
-class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
-             "DJI_Mavic_Mini", "DJI_Phantom_4", "Parrot_Disco"]
 
 c = {
     "epochs": 75,
     "learning_rate": 0.001,
     "batch_size": 128,
-    "SNR": 0,
+    "SNR": 10,
     "f_s": 26000,
 }
 
