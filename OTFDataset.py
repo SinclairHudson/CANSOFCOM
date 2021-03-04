@@ -4,10 +4,6 @@ from configurations import djimavicair2, djimatrice300rtk, djimavicmini, djiphan
 import random
 import numpy as np
 
-drones = [djimatrice300rtk, djimavicair2,
-          djimavicmini, djiphantom4, parrotdisco]
-c = 2.998e8  # speed of light in m/s
-
 
 class OTFDataset(torch.utils.data.Dataset):
     """
