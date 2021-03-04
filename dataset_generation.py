@@ -10,6 +10,7 @@ from scipy import signal
 import seaborn as sns
 import matplotlib.pyplot as plt
 import numpy as np
+from drone_constants import drones
 
 sample_length = 0.15 # in seconds
 Xf_s = 10_000  # sample frequency for X band, in hz
@@ -19,13 +20,10 @@ testset_size = 2_000  # per denomination
 trainset_size = 10_000  # per denomination
 
 # config = dict(scenarioWband, **djimatrice300rtk)
-frequencies = [Wf_s, Xf_s]
+sampling_frequencies = [Wf_s, Xf_s]
 SNRs = [10, 5, 0, -5]
 
-# here's the order of drones. Don't change the order.
-drones = [djimatrice300rtk, djimavicair2, djimavicmini, djiphantom4, parrotdisco]
-
-for f_s in frequencies:
+for f_s in sampling_frequencies:
     for SNR in SNRs:
         for drone in drones:
             scenario = {}

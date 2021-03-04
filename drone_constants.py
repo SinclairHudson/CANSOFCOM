@@ -5,4 +5,5 @@ class_map = ["DJI_Matrice_300_RTK", "DJI_Mavic_Air_2",
 
 drones = [djimatrice300rtk, djimavicair2,
           djimavicmini, djiphantom4, parrotdisco]
+
 c = 2.998e8  # speed of light in m/s

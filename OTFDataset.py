@@ -3,6 +3,7 @@ from signalgenerator import psigenerator, generateData, generateSTFT
 from configurations import djimavicair2, djimatrice300rtk, djimavicmini, djiphantom4, parrotdisco
 import random
 import numpy as np
+from drone_constants import c, drones
 
 
 class OTFDataset(torch.utils.data.Dataset):
