@@ -1,7 +1,7 @@
 from train import OTFTrain
 
 conf = {
-    "epochs": 1,
+    "epochs": 75,
     "learning_rate": 0.001,
     "batch_size": 128,
     "SNR": 10,
