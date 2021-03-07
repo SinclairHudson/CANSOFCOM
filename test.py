@@ -145,26 +145,29 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
         }
         return results
 
-times = [(x)*0.001 for x in range(10, 100)]
-accuracies = []
-micro_averages = []
-APs = [[] for x in range(len(class_map))]
-for d in times:
-    print(d)
-    results = testclassifier(f"models/e75SNR10f_s26000.pt", dataset_size=10_000, sample_length=d, f_s=26_000, SNR=10)
-    accuracies.append(results["accuracy"])
-    micro_averages.append(results["AP score"]['micro'])
-    for x in range(len(class_map)):
-        APs[x].append(results["AP score"][x])
+# times = [(x)*0.001 for x in range(10, 100)]
+# accuracies = []
+# micro_averages = []
+# APs = [[] for x in range(len(class_map))]
+# for d in times:
+    # print(d)
+    # results = testclassifier(f"models/e75SNR10f_s26000.pt", dataset_size=10_000, sample_length=d, f_s=26_000, SNR=10)
+    # accuracies.append(results["accuracy"])
+    # micro_averages.append(results["AP score"]['micro'])
+    # for x in range(len(class_map)):
+        # APs[x].append(results["AP score"][x])
 
-# plt.plot(times, accuracies, label="accuracy")
-for x in range(len(class_map)):
-    plt.plot(times, APs[x], label=class_map[x])
+# # plt.plot(times, accuracies, label="accuracy")
+# for x in range(len(class_map)):
+    # plt.plot(times, APs[x], label=class_map[x])
 
-plt.plot(times, micro_averages, label="average")
+# plt.plot(times, micro_averages, label="average")
 
-plt.xlabel('duration of signal (s)')
-plt.ylabel('Average Precision')
-plt.ylim([0.0, 1.05])
-plt.legend()
-plt.show()
+# plt.xlabel('duration of signal (s)')
+# plt.ylabel('Average Precision')
+# plt.ylim([0.0, 1.05])
+# plt.legend()
+# plt.show()
+
+
+
