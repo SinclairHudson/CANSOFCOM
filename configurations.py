@@ -48,13 +48,13 @@ config3 = {
 scenarioXband= {
     "lamb": 0.02998,  # X band has about a 3 cm wavelength
     "f_c": c/0.02998,
-    "SNR": -5
+    "SNR": 10
 }
 
 scenarioWband= {
     "lamb": 0.003189,  # W band has wavelength about 3 mm
     "f_c": c/0.003189,
-    "SNR": -5
+    "SNR": None
 }
 
 djimavicair2 = {

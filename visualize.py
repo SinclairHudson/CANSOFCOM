@@ -1,15 +1,19 @@
 from signalgenerator import psigenerator, generateData
+from drone_constants import drones, class_map
 from configurations import *
 
-from fourier import plotSTFT
+from fourier import plotSTFT, plotManySTFT
 
-config = paperconfig1
-config = dict(scenarioWband, **djiphantom4)
-psi = psigenerator(**config)
-
-f_s = 10_000
+f_s = 26_000
 sample_length = 0.15
-xs, r_ys, i_ys = generateData(psi, f_s, sample_length)
+multi_ys = []
 
-plotSTFT(xs, r_ys, f_s, config)
-plotSTFT(xs, i_ys, f_s, config)
+for drone in drones:
+    config = dict(scenarioWband, **drone)
+    psi = psigenerator(**config)
+
+    xs, r_ys, i_ys = generateData(psi, f_s, sample_length)
+    multi_ys.append(r_ys)
+
+plotManySTFT(xs, multi_ys, f_s, class_map, config)
+# plotSTFT(xs, i_ys, f_s, config)

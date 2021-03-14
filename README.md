@@ -62,4 +62,12 @@ conda env create -f environment.yml
 This repository was built for the CANSOFCOM Drone Classification Machine Learning challenge of Hack The North 2020++.  
 You can see the original challenge in CANSOFCOM_Challenge.pdf.  
 
+## TODO
+
+These are some ideas that I don't have time to implement. (in order of predicted impact on performance)
+
+* Finding the ideal STFT parameters based on the f_s and such.
+* Focal Loss instead of crossentropy to focus on classes that are harder
+* Small architecture changes. Deeper? Larger receptive field?
+* Hyperparam sweep
 

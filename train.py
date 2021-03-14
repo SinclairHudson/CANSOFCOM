@@ -166,7 +166,7 @@ def train(conf):
 
             confm = np.add(confm, cm)
             correct += (predicted == y).sum().item()
-            total += c["batch_size"]
+            total += conf["batch_size"]
 
         plt.close()
         fig, ax = plot_confusion_matrix(conf_mat=confm,
@@ -207,4 +207,4 @@ def train(conf):
 
     net.eval()
     torch.save(net.state_dict(),
-               f"models/e{conf['epochs']}SNR{conf['SNR']}f_s{conf['f_s']}.pt")
+               f"models/{str(conf)}.pt")

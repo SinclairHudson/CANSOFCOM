@@ -12,28 +12,27 @@ import matplotlib.pyplot as plt
 import torch.nn as nn
 from helpers import confuse, to_one_hot_vector
 from OTFDataset import OTFDataset
-from drone_constants import drones, class_map
+from drone_constants import drones, class_map, c
+from train import train
 
 softmax = nn.Softmax(dim=0)
 
-c = {
-    "batch_size": 64,
-}
 
 def dataloader(file_extension):
     data = np.load(file_extension)
     return data
 
 
-def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_000, SNR=10, vis=False):
+def testclassifier(model_path, conf, dataset_size=10_000, vis=False):
+    print(f"starting testing of {str(conf)}")
 
     with torch.no_grad():
         num_classes = 5
-        testds = OTFDataset(lamb=0.02998, length=dataset_size, 
-                            SNR=SNR, f_s=f_s, 
-                            sample_length=sample_length)
+        testds = OTFDataset(lamb=c/conf["f_c"], length=dataset_size, 
+                            SNR=conf["SNR"], f_s=conf["f_s"], 
+                            sample_length=conf["signal_duration"])
         testLoader = torch.utils.data.DataLoader(
-            testds, 64, shuffle=True, num_workers=4)
+            testds, conf["batch_size"], shuffle=True, num_workers=4)
 
 
         device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
@@ -75,7 +74,7 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
 
             confm = np.add(confm, cm)
             correct += (predicted == y.cpu()).sum().item()
-            total += c["batch_size"]
+            total += conf["batch_size"]
 
 
         precision = dict()
@@ -126,7 +125,7 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
             plt.ylim([0.0, 1.05])
             plt.xlabel('False Positive Rate')
             plt.ylabel('True Positive Rate')
-            plt.title('Receiver operating characteristic curves')
+            plt.title('Receiver Operating Characteristic curves')
             plt.legend(loc="lower right")
 
             plt.figure()
@@ -171,3 +170,17 @@ def testclassifier(model_path, dataset_size=10_000, sample_length=0.15, f_s=26_0
 
 
 
+conf = {
+    "epochs": 150,
+    "learning_rate": 0.001,
+    "batch_size": 128,
+    "SNR": 5,
+    "f_s": 26_000,
+    "f_c": 9.4e10,
+    "signal_duration": 0.15,
+    "train_set_size": 10_000,
+    "test_set_size": 2_000,
+}
+
+train(conf)
+results = testclassifier(f"models/{str(conf)}.pt", conf=conf, dataset_size=10_000, vis=True)
