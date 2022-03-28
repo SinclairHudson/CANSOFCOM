@@ -13,7 +13,19 @@ class OTFDataset(torch.utils.data.Dataset):
     same dataset.
     """
 
-    def __init__(self, lamb, length, SNR, f_s, sample_length):
+    def __init__(self, lamb, length, SNR, f_s, sample_length, in_memory=True):
+        """
+        in_memory is a boolean, specifying if the dataset should be pre-generated
+        and just stored in memory for the duration of the object's life.
+        This greatly speeds up training, but the dataset is technically smaller.
+        However, with large dataset, the variance should be the same.
+        if in_memory is false, then the dataset actually changes every epoch.
+        Again, this shouldn't have a large impact on large datasets.
+        If your dataset is too large, of if f_s or sample_length are very big,
+        then it's possible that initializing this object with in_memory
+        will take all the RAM in your system, crashing it. In this case,
+        you're forced to either reduce the size or set in_memory=False.
+        """
         super(OTFDataset, self).__init__()
         self.lamb = lamb
         self.length = length
@@ -21,7 +33,29 @@ class OTFDataset(torch.utils.data.Dataset):
         self.f_s = f_s
         self.sample_length = sample_length
 
+        self.in_memory = in_memory
+
+        if self.in_memory:
+            print(f"generating an in-memory on the fly dataset of size {self.length}.")
+            self.drone_classes = []
+            self.STFTs = []
+            for x in range(self.length):
+                if x % 500 == 0:
+                    print(f"{x}/{self.length}")
+
+                stft, dc = self.generate_item(x)
+                self.drone_classes.append(dc)
+                self.STFTs.append(stft)
+
+
     def __getitem__(self, index):
+
+        if self.in_memory:
+            return self.STFTs[index], self.drone_classes[index]
+        else:
+            return generate_item(index)
+
+    def generate_item(self, index):
 
         scenario = {
             "SNR": self.SNR,

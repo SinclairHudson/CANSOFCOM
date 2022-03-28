@@ -14,7 +14,7 @@ def plotSTFT(xs, ys, f_s, c, short_window_size=16, size=10_000):
 
     # we want the long_window_size to be longer than the period of the propellors.
     # this is so that we don't see the micro-dopler in the long window
-    long_window_size = int((f_s / c['f_rot']) * 1.3)
+    long_window_size = int((f_s / c['f_rot']) * 2)
     assert long_window_size > (f_s/c['f_rot'])
 
     fig, axs = plt.subplots(3, ncols=1, figsize=(14,10))
@@ -32,11 +32,52 @@ def plotSTFT(xs, ys, f_s, c, short_window_size=16, size=10_000):
     f, t, Zxx = signal.stft(ys, f_s, window='hamming', nperseg=long_window_size,
                             noverlap=long_window_size//2, return_onesided=False)
     axs[2].pcolormesh(t, np.fft.fftshift(f), 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0))))
-    axs[2].axis([0,0.1,-size, size])
+    # axs[2].axis([0,0.1,-size, size])
 
+    plt.tight_layout()
     plt.xlabel("time (s)")
     plt.show()
 
+def plotcomparisonSTFT(xs, ys, ys_2, f_s, c, short_window_size=32, size=10_000):
+
+    # we want the long_window_size to be longer than the period of the propellors.
+    # this is so that we don't see the micro-dopler in the long window
+    long_window_size = int((f_s / c['f_rot']) * 2)
+    assert long_window_size > (f_s/c['f_rot'])
+
+    fig, axs = plt.subplots(3, ncols=2, figsize=(14,10))
+    # fig.suptitle(f"N: {c['N']}, f_s: {f_s}, L_1: {c['L_1']}, L_2: {c['L_2']}, lambda: {c['lamb']}, f_rot: {c['f_rot']}, SNR: {c['SNR']}")
+    # time-domain
+    # axs[0].set_title("time domain signal")
+    axs[0, 0].plot(xs, ys)
+
+    # axs[1].set_title("short-window STFT")
+    f, t, Zxx = signal.stft(ys, f_s, window='hamming', nperseg=short_window_size,
+                            noverlap=short_window_size//2, return_onesided=False)
+    axs[1,0].pcolormesh(t, np.fft.fftshift(f), 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0))))
+
+    # axs[2].set_title("long-window STFT")
+    f, t, Zxx = signal.stft(ys, f_s, window='hamming', nperseg=long_window_size,
+                            noverlap=long_window_size//2, return_onesided=False)
+    axs[2,0].pcolormesh(t, np.fft.fftshift(f), 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0))))
+    axs[2,0].axis([0.03,0.15,-size, size])
+
+    axs[0, 1].plot(xs, ys_2)
+
+    # axs[1].set_title("short-window STFT")
+    f, t, Zxx = signal.stft(ys_2, f_s, window='hamming', nperseg=short_window_size,
+                            noverlap=short_window_size//2, return_onesided=False)
+    axs[1,1].pcolormesh(t, np.fft.fftshift(f), 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0))))
+
+    # axs[2].set_title("long-window STFT")
+    f, t, Zxx = signal.stft(ys_2, f_s, window='hamming', nperseg=long_window_size,
+                            noverlap=long_window_size//2, return_onesided=False)
+    axs[2,1].pcolormesh(t, np.fft.fftshift(f), 20*np.log10(np.abs(np.fft.fftshift(Zxx, axes=0))))
+    axs[2,1].axis([0.03,0.15,-size, size])
+
+    plt.tight_layout()
+    plt.xlabel("time (s)")
+    plt.show()
 
 def plotManySTFT(xs, multi_ys, f_s, names, c, short_window_size=16, size=10_000):
 
@@ -44,7 +85,7 @@ def plotManySTFT(xs, multi_ys, f_s, names, c, short_window_size=16, size=10_000)
     # this is so that we don't see the micro-doppler in the long window
 
     fig, axs = plt.subplots(len(names), ncols=1)
-    fig.suptitle(f"STFTs of multiple different commercial drones")
+    fig.suptitle(f"STFTs of DJI_Matrice_300_RTK at different SNR (0.15 s)")
     # time-domain
     for x in range(len(names)):
         axs[x].set_title(names[x])

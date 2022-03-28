@@ -1,4 +1,5 @@
 import torch.nn as nn
+import os
 import time
 import wandb
 import torch
@@ -14,7 +15,7 @@ from OTFDataset import OTFDataset
 from drone_constants import class_map, c
 
 
-def OTFTrain(conf):
+def OTFTrain(conf, trainds=None, testds=None, overwrite=False):
     """
     This function generates a dataset on the fly, so no need to save anything.
     However, it's slower, since the CPU has to perform a fourier transform
@@ -22,20 +23,27 @@ def OTFTrain(conf):
     :param conf: a dictionary containing parameters for the data and hyperparameters
     for training.
     """
+    if (not overwrite) and f"{str(conf)}.pt" in os.listdir("models/"):
+        print(f"already trained a model with conf {str(conf)}, skipping this run.")
+        return
+
+    print(f"starting OTFtraining of {str(conf)}")
     wandb.init(project="cansofcom", config=conf)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
     net = RadarDroneClassifier().to(device)
 
-    trainds = OTFDataset(c/conf["f_c"], conf["train_set_size"], conf["SNR"],
-                        conf["f_s"], conf["signal_duration"])
+    if trainds is None:
+        trainds = OTFDataset(c/conf["f_c"], conf["train_set_size"], conf["SNR"],
+                            conf["f_s"], conf["signal_duration"])
 
     trainLoader = torch.utils.data.DataLoader(
         trainds, conf["batch_size"], shuffle=True, num_workers=4)
 
-    testds = OTFDataset(c/conf["f_c"], conf["test_set_size"], conf["SNR"],
-                        conf["f_s"], conf["signal_duration"])
+    if testds is None:
+        testds = OTFDataset(c/conf["f_c"], conf["test_set_size"], conf["SNR"],
+                            conf["f_s"], conf["signal_duration"])
 
     testLoader = torch.utils.data.DataLoader(
         testds, conf["batch_size"], shuffle=True, num_workers=4)
@@ -116,6 +124,10 @@ def OTFTrain(conf):
 
 
 def train(conf):
+    if f"{str(conf)}.pt" in os.listdir("models/"):
+        print(f"already trained a model with conf {str(conf)}, skipping this run")
+        return
+
     wandb.init(project="cansofcom", config=conf)
 
     device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")

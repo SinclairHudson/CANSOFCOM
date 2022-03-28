@@ -170,17 +170,18 @@ def testclassifier(model_path, conf, dataset_size=10_000, vis=False):
 
 
 
-conf = {
-    "epochs": 150,
-    "learning_rate": 0.001,
-    "batch_size": 128,
-    "SNR": 5,
-    "f_s": 26_000,
-    "f_c": 9.4e10,
-    "signal_duration": 0.15,
-    "train_set_size": 10_000,
-    "test_set_size": 2_000,
-}
+if __name__ == "__main__":
+    conf = {
+        "epochs": 150,
+        "learning_rate": 0.001,
+        "batch_size": 128,
+        "SNR": 5,
+        "f_s": 26_000,
+        "f_c": 9.4e10,
+        "signal_duration": 0.15,
+        "train_set_size": 10_000,
+        "test_set_size": 2_000,
+    }
 
-train(conf)
-results = testclassifier(f"models/{str(conf)}.pt", conf=conf, dataset_size=10_000, vis=True)
+    train(conf)
+    results = testclassifier(f"models/{str(conf)}.pt", conf=conf, dataset_size=10_000, vis=True)

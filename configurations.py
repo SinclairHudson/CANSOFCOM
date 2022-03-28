@@ -21,13 +21,27 @@ paperconfig2 = {
     "R": 0,
     "V_rad": 0,
     "A_r": 1,
-    "N": 5,
+    "N": 4,
     "L_1": 0.25,
     "L_2": 1,
     "f_rot": 40,
     "lamb": 0.2,
     "theta": 0,
     "f_c": c/0.2,  # must be c/lamb
+    "SNR": None
+}
+
+configforHERM = {
+    "R": 0,
+    "V_rad": 0,
+    "A_r": 1,
+    "N": 4,
+    "L_1": 0.25,
+    "L_2": 1,
+    "f_rot": 40,
+    "lamb": 0.02,
+    "theta": 0,
+    "f_c": c/0.02,  # must be c/lamb
     "SNR": None
 }
 

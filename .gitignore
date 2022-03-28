@@ -8,3 +8,5 @@ testset/*
 trainset/*
 wandb/*
 models/*
+img/*
+sweeps/*

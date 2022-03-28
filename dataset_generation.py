@@ -12,9 +12,9 @@ import matplotlib.pyplot as plt
 import numpy as np
 from drone_constants import drones
 
-sample_length = 0.15 # in seconds
-Xf_s = 10_000  # sample frequency for X band, in hz
+sample_length = 0.20 # in seconds
 Wf_s = 26_000  # sample frequency for W band, in hz
+Xf_s = 10_000  # sample frequency for X band, in hz
 
 testset_size = 2_000  # per denomination
 trainset_size = 10_000  # per denomination
@@ -22,6 +22,10 @@ trainset_size = 10_000  # per denomination
 # config = dict(scenarioWband, **djimatrice300rtk)
 sampling_frequencies = [Wf_s, Xf_s]
 SNRs = [10, 5, 0, -5]
+
+p = psigenerator(**dict(scenarioWband, **drones[0]))
+STFT = generateSTFT(p, Xf_s, sample_length, offset=True)
+print(STFT.shape)
 
 for f_s in sampling_frequencies:
     for SNR in SNRs:
